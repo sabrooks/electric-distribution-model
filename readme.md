@@ -18,7 +18,7 @@ Distribution Model is a library to build an electric utility distribution model 
         2. Secondary
 
 
-## Postgres SQL Load
+## Postgres SQL Data Loading
 
 Elements are loaded from the PostGIS database.  The SQL query is stored in the element file.
 
