@@ -1,6 +1,6 @@
 # Distribution Model
 
-Distribution Model is a library to build a distribution model.  Elements are connected based on element type and location.  
+Distribution Model is a library to build an electric utility distribution model (Digital Twin) from an ESRI database.  Elements are connected based on element type and location. This library supports engineering analysis of a distribution utility. 
 
 ## Elements
 
@@ -22,7 +22,12 @@ Distribution Model is a library to build a distribution model.  Elements are con
 
 Elements are loaded from the PostGIS database.  The SQL query is stored in the element file.
 
-## Uses
+## Analysis Supported
 1. Transformer Loading
 2. Conductor peak load 
 3. Phase balancing
+
+## Future Development
+Migrate to ESRI Utility Newtork has two main benefits:
+1. Standardizes data model between utilties.
+2. Provides more robust / stable connection logic than element type and location.
