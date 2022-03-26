@@ -2,6 +2,7 @@ import unittest
 from elements.line.line import Primary
 from elements.point_device.openpoints import OpenPoint
 from elements.point_device.protection.fuse import Fuse
+from elements.point_device.protection.protection import Protection
 from elements.point_device.service.service import Meter
 from elements.point_device.transformer import Transformer
 from utility import Phase
@@ -79,6 +80,19 @@ TEST_OPENPOINT = OpenPoint.new(
     "6216350",
     "A",
     False,
+    "123456",
+)
+
+TEST_PROTECTION = Protection.new(
+    16643,
+    "{66639AF3-B16D-4629-8F21-352E532C6188}",
+    {"type": "Point", "coordinates": [-132.652359461986, 49.3320067454193]},
+    "5021253",
+    "Recloser",
+    "ABC",
+    "Open",
+    "REC_",
+    "VN4",
 )
 
 
@@ -114,3 +128,10 @@ class TestLine(unittest.TestCase):
 class TestOpenPoint(unittest.TestCase):
     def test_init(self):
         self.assertEqual(TEST_OPENPOINT.gridecode, "6216350")
+
+
+class TestProtection(unittest.TestCase):
+    def test_init(self):
+        self.assertEqual(TEST_PROTECTION.feeder_id, "VN4")
+        self.assertFalse(TEST_PROTECTION.enabled)
+        self.assertEqual(TEST_PROTECTION.guid, "{66639AF3-B16D-4629-8F21-352E532C6188}")

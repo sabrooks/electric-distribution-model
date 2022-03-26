@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from typing import Dict, NamedTuple
+from typing import Dict
 
-from utility import VoltageClass
+from utility import Phase, VoltageClass
 from ..point_device import PointDevice
 from datetime import datetime
 from enum import Enum
@@ -24,21 +24,32 @@ class Protection(PointDevice):
 
     @staticmethod
     def new(
-        id, guid, geo, facility_id, subtype, phase, enabled, prefix, feeder_id
+        id: int,
+        guid: str,
+        geo: Dict,
+        facility_id: str,
+        subtype: str,
+        phase: Phase,
+        enabled: bool,
+        prefix: str,
+        feeder_id: str,
     ) -> "Protection":
         return Protection(
             id,
             guid,
-            phase,
-            geo,
+            Phase(phase),
+            geo.get("coordinates"),
             f"{prefix}{facility_id}",
             VoltageClass(1),
             enabled,
             feeder_id,
+            facility_id,
+            subtype,
         )
 
 
-class ProtectionStatus(NamedTuple):
+@dataclass
+class ProtectionStatus:
     station_name: str
     point_name: str
     point_desc: str
@@ -113,53 +124,3 @@ SELECT
   ON statupoints.STATIONPID = STATIONPOINTS.PKEY
   """
 
-
-def get_protection() -> Dict[str, Protection]:
-    with iqgeo_engine.begin() as conn:
-        raw = conn.execute(PROTECTION_SQL)
-        protection = {
-            guid: Protection(
-                id, guid, geo, facility_id, subtype, phase, enabled, prefix, feeder_id
-            )
-            for id, guid, geo, facility_id, subtype, phase, enabled, prefix, feeder_id in raw
-        }
-
-    with iqgeo_engine.begin() as conn:
-        raw = conn.execute(SWITCH_SQL)
-        switches = {
-            guid: Protection(
-                id, guid, geo, facility_id, subtype, phase, enabled, "SW_", feeder_id
-            )
-            for id, guid, geo, facility_id, subtype, phase, enabled, feeder_id in raw
-        }
-    return {**protection, **switches}
-
-
-def get_protection_status() -> Dict[str, ProtectionStatus]:
-    with mssql_engine.begin() as conn:
-        raw = conn.execute(PROTECTION_STATUS)
-        statuses = (
-            ProtectionStatus.new(
-                station, point, point_desc, station_desc, update, value
-            )
-            for station, point, point_desc, station_desc, update, value in raw
-        )
-        return {s.gridcode: s for s in statuses}
-
-
-TEST_PROTECTION = Protection(
-    16643,
-    "{66639AF3-B16D-4629-8F21-352E532C6188}",
-    {"type": "Point", "coordinates": [-122.652359461986, 47.3320067454193]},
-    "5021253",
-    "Recloser",
-    "ABC",
-    "Open",
-    "REC_",
-    "VN4",
-)
-
-assert TEST_PROTECTION.locations == [
-    (-122.652359461986, 47.3320067454193, VoltageClass(1))
-]
-assert TEST_PROTECTION.feeder_id == "VN4"
