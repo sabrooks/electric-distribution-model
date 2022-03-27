@@ -48,12 +48,12 @@ TEST_METER = Meter.new(
     14952,
     "{9003D2B4-551D-4F65-8285-8344B836EACE}",
     {"type": "Point", "coordinates": [-132.591119630628, 49.3092392396018]},
-    "3822 56TH ST CT NW",
+    "1234 56TH ST CT NW",
     "0157008",
     "C",
     METER_DETAILS.get("meter_number"),
     METER_DETAILS.get("meter_type"),
-    "VN4",
+    "BN4",
 )
 
 PRIOH = Primary.new(
