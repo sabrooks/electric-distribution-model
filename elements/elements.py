@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
+
+from utility import Line, Point
 
 
 class VoltageClass(Enum):
@@ -17,7 +19,7 @@ class Element:
     id: int
     guid: str
     phase: str
-    geo: List[List[float]]
+    geo: Union[Point, Line]
     name: str
     voltage_class: VoltageClass
     enabled: bool

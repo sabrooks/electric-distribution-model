@@ -1,12 +1,20 @@
-from typing import List, Dict
-import networkx as nx
-from elements.line.line import Line, Secondary
-from elements.point_device.service.service import Service
-from elements.point_device.protection.fuse import Fuse
-from elements.point_device.transformer import Transformer
-from elements.point_device.openpoints import OpenPoint
-from elements.point_device.service.light import Light
-from elements.point_device.protection.protection import Protection
-from elements.station import Station
+from typing import Deque, Dict
 from elements.elements import Element
+from elements.point_device.transformer import Transformer
+from utility import Point
+from collections import deque
+
+
+def connect(system: Dict[str, Element]) -> None:
+
+    frontier: Deque[Element] = deque(
+        (element for element in system.values() if isinstance(element, Transformer)),
+        None,
+    )
+    while frontier:
+        parent = frontier.pop()
+        children = [element for element in system.values() if element.geo == parent.geo]
+        frontier.extend(children)
+        for child in children:
+            del system[child.guid]
 
