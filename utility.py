@@ -1,5 +1,7 @@
 from enum import Enum
-from typing import Tuple
+from typing import List, Tuple
+
+from elements.elements import Element
 
 
 class Phase(Enum):
@@ -19,3 +21,5 @@ class VoltageClass(Enum):
 
 
 Point = Tuple[float, float]
+Line = List[Point]
+System = {str, Element}
